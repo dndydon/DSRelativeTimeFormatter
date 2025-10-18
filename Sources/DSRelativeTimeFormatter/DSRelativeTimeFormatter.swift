@@ -31,7 +31,7 @@ public extension TimeInterval {
 /// The formatter provides two styles:
 /// - `subunits`: Picks one or more best-fitting units (s, min, hr, d, wk, mo, yr) and shows integer quantities.
 ///   Example: "3hr 15min ago", "1d 3hr ago", "45s".
-/// - `decimalMostSignificant`: Picks the most significant unit and shows one fractional digit.
+/// - `decimal`: Picks the most significant unit and shows one fractional digit.
 ///   Example: "1.5 hr ago", "2.3 d".
 ///
 /// Usage:
@@ -40,7 +40,7 @@ public extension TimeInterval {
 /// let start = someDate
 /// let end = Date()
 /// let s1 = formatter.subunits(from: start, to: end, components: 2)  // "3hr 15min ago"
-/// let s2 = formatter.decimalMostSignificant(from: start, to: end)    // "1.5 hr ago"
+/// let s2 = formatter.decimal(from: start, to: end)    // "1.5 hr ago"
 /// ```
 public struct DSRelativeTimeFormatter {
   /// Create a formatter. This type is stateless and thread-safe.
@@ -87,7 +87,7 @@ public struct DSRelativeTimeFormatter {
   ///   - to: The later date (usually now).
   ///   - showingRelative: If `true`, appends " ago" to indicate past time.
   /// - Returns: A string like "1.5 hr ago" or "2.3 d".
-  public func decimalMostSignificant(from start: Date, to end: Date, showingRelative: Bool = true) -> String {
+  public func decimal(from start: Date, to end: Date, showingRelative: Bool = true) -> String {
     let duration = max(0, end.timeIntervalSince(start))
     let unit = mostSignificantUnit(for: duration)
     let unitSeconds = unit.standardTimeInterval() ?? 1
@@ -132,6 +132,7 @@ public struct DSRelativeTimeFormatter {
     formatter.minimumIntegerDigits = 1
     return formatter.string(from: NSNumber(value: value)) ?? String(format: "%.1f", value)
   }
+
 }
 
 // MARK: - Calendar.Component helpers
